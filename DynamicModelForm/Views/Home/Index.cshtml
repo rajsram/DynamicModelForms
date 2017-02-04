@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+@model DynamicModelForm.Models.StudentModel
+<div class="jumbotron">
+    @*@using (Ajax.BeginForm("Index", "Home", new AjaxOptions { HttpMethod = "POST" }, new { id = "frmdemo" }))*@
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="col-sm-3">
+                <label for="Name">Name</label>
+                @*<input type="text" id="Name" name="Name" />*@
+                @Html.TextBoxFor(x => x.Name)
+                @Html.ValidationMessageFor(x => x.Name)
+            </div>
+            <div class="col-sm-3">
+                <label for="Grade">Grade</label>
+                @*<input type="text" id="Grade" name="Grade" />*@
+                @Html.TextBoxFor(x => x.Grade)
+            </div>
+            <div class="col-sm-3">
+                <label for="Tutor">Tutor</label>
+                @*<input type="text" id="Tutor" name="Tutor" />*@
+                @Html.TextBoxFor(x => x.Tutor)
+            </div>
+            <div class="col-sm-1">
+                <a class="btn btn-primary" id="addSubject">Add Subject</a>
+            </div>
+            <div class="col-sm-1">
+                @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Submit</button>*@
+                <input class="btn btn-primary" type="submit" value="Submit" />
+            </div>
+            <!-- Modal -->
+            <div id="myModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Modal Header</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Some text in the modal.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <input class="btn btn-primary" type="submit" value="Submit" />
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            @*<div class="col-sm-1">
+                    <input class="btn btn-primary" type="submit" value="Submit" />
+                </div>*@
+        </div>
+        <div id="subjectInfo" style="padding-top:10px;">
+            @{
+                if (Model.Subjects != null)
+                {
+                    var count = 0;
+                    foreach (var sub in Model.Subjects)
+                    {
+                        <div class='row'>
+                            <div class='col-sm-8'>
+                                <label for="Subject_@count">Subject @count</label>
+                                @*@Html.TextBoxFor(x => x.Subject, new { id = "subject_" + count })*@
+                                <input type="text" class="SubjectsSubject" name="Subjects[@count].Subject" id="subject_@count" value="@sub.Subject" />
+                                @Html.ValidationMessageFor(x => x.Subjects[count].Subject)
+                                @*<span class="field-validation-valid" data-valmsg-for="Subjects[@count].Subject" data-valmsg-replace="true"></span>*@
+                            </div>
+                        </div>
+                        count++;
+                    }
+                }
+            }
+        </div>
+        @*<div id="subjectInfo1" style="padding-top:10px;">
+                @Html.EditorFor(x => x.Subjects[0].Subject)
+            </div>*@
+                }
+</div>
+
+<script type="text/javascript">
+    //var count = 0;
+    $("#addSubject").click(function () {
+        var count = $('.SubjectsSubject').length
+        $.ajax({
+            url: '@Url.Action("Subjects","Home")' + "?count=" + count,
+            success: function (result) {
+                $("#subjectInfo").append(result);
+                //count++;
+            },
+            error: function (req, status, error) {
+                alert(error);
+            }
+        });
+    });
+</script>

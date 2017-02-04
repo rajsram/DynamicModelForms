@@ -1,0 +1,13 @@
+﻿@model DynamicModelForm.Models.SubjectModel
+<div class='row'>
+    @{
+        var count = ViewBag.count;
+    }
+    <div class='col-sm-8'>
+        <label for="Subject_@count">Subject @count</label>
+        @*@Html.TextBoxFor(x => x.Subject, new { id = "subject_" + count })*@
+        <input type="text" class="SubjectsSubject" name="Subjects[@count].Subject" id="subject_@count"/>
+        @Html.ValidationMessageFor(x => x.Subject)
+        @*<span class="field-validation-valid" data-valmsg-for="Subjects[@count].Subject" data-valmsg-replace="true"></span>*@
+    </div>
+</div>
